@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { useAuth, useVehicles, ProtectedRoute } from '@/hooks';
 import { Vehicle } from '@/types';
 import { IMAGE_PATHS } from '@/utils/imagePath';
+import { getRoutePath } from '@/utils/routePath';
 
 /**
  * Componente para el navbar del dashboard
@@ -16,8 +17,8 @@ function DashboardNavbar() {
   const router = useRouter();
 
   const handleLogout = async () => {
-    // Redirigir primero, luego hacer logout
-    router.push('/');
+    // Redirigir primero usando getRoutePath para manejar basePath correctamente
+    router.push(getRoutePath('/'));
     await logout();
   };
 
