@@ -17,7 +17,7 @@ function DashboardNavbar() {
 
   const handleLogout = async () => {
     await logout();
-    router.push('/home');
+    router.push('/');
   };
 
   return (

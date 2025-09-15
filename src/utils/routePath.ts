@@ -1,33 +1,18 @@
 /**
  * Utilidades para manejar rutas de navegación en desarrollo y producción
- * Soluciona el problema de GitHub Pages con rutas base
+ * Next.js maneja automáticamente el basePath para navegación interna
  */
 
 /**
- * Obtiene la ruta base configurada para el proyecto
- * En producción usa el basePath de next.config.ts, en desarrollo usa ''
- */
-const getBasePath = (): string => {
-  // En producción (GitHub Pages), necesitamos el basePath
-  if (process.env.NODE_ENV === 'production') {
-    return '/frontend-prueba-tecnica-gps';
-  }
-  // En desarrollo, no necesitamos basePath
-  return '';
-};
-
-/**
- * Construye la ruta completa para navegación
+ * Construye la ruta para navegación interna (Next.js maneja el basePath automáticamente)
  * @param routePath - Ruta relativa (ej: '/dashboard', '/login')
- * @returns Ruta completa con basePath incluido para producción
+ * @returns Ruta normalizada para navegación interna
  */
 export const getRoutePath = (routePath: string): string => {
-  const basePath = getBasePath();
-  
-  // Asegurar que routePath comience con /
+  // Para navegación interna, Next.js maneja el basePath automáticamente
+  // Solo necesitamos asegurar que la ruta comience con /
   const normalizedPath = routePath.startsWith('/') ? routePath : `/${routePath}`;
-  
-  return `${basePath}${normalizedPath}`;
+  return normalizedPath;
 };
 
 /**
