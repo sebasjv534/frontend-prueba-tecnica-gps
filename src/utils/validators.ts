@@ -58,7 +58,7 @@ export const validateVehicle = (vehicle: {
   brand: string;
   arrival_location: string;
   applicant: string;
-}) => {
+}): Record<string, string> => {
   const errors: Record<string, string> = {};
 
   if (!isValidString(vehicle.brand)) {
@@ -72,6 +72,21 @@ export const validateVehicle = (vehicle: {
   if (!isValidString(vehicle.applicant)) {
     errors.applicant = 'El aspirante es requerido y debe tener máximo 120 caracteres';
   }
+
+  return errors;
+};
+
+/**
+ * Valida un objeto vehículo completo (versión completa con isValid)
+ * @param vehicle - Datos del vehículo a validar
+ * @returns Objeto con isValid y errores
+ */
+export const validateVehicleComplete = (vehicle: {
+  brand: string;
+  arrival_location: string;
+  applicant: string;
+}) => {
+  const errors = validateVehicle(vehicle);
 
   return {
     isValid: Object.keys(errors).length === 0,
@@ -88,7 +103,7 @@ export const validateRegisterData = (userData: {
   username: string;
   email: string;
   password: string;
-}) => {
+}): Record<string, string> => {
   const errors: Record<string, string> = {};
 
   if (!isValidUsername(userData.username)) {
@@ -102,6 +117,21 @@ export const validateRegisterData = (userData: {
   if (!isValidPassword(userData.password)) {
     errors.password = 'La contraseña debe tener al menos 8 caracteres, una letra y un número';
   }
+
+  return errors;
+};
+
+/**
+ * Valida datos de registro de usuario (versión completa con isValid)
+ * @param userData - Datos del usuario a validar
+ * @returns Objeto con isValid y errores
+ */
+export const validateRegisterDataComplete = (userData: {
+  username: string;
+  email: string;
+  password: string;
+}) => {
+  const errors = validateRegisterData(userData);
 
   return {
     isValid: Object.keys(errors).length === 0,
@@ -117,7 +147,7 @@ export const validateRegisterData = (userData: {
 export const validateLoginData = (loginData: {
   username: string;
   password: string;
-}) => {
+}): Record<string, string> => {
   const errors: Record<string, string> = {};
 
   if (!isNotEmpty(loginData.username)) {
@@ -127,6 +157,20 @@ export const validateLoginData = (loginData: {
   if (!isNotEmpty(loginData.password)) {
     errors.password = 'La contraseña es requerida';
   }
+
+  return errors;
+};
+
+/**
+ * Valida datos de login (versión completa con isValid)
+ * @param loginData - Datos de login a validar
+ * @returns Objeto con isValid y errores
+ */
+export const validateLoginDataComplete = (loginData: {
+  username: string;
+  password: string;
+}) => {
+  const errors = validateLoginData(loginData);
 
   return {
     isValid: Object.keys(errors).length === 0,

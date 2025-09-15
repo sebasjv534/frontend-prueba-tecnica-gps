@@ -13,22 +13,33 @@ class AuthService {
    */
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
     try {
-      // El backend espera los datos como FormData para OAuth2
-      const formData = new FormData();
-      formData.append('username', credentials.username); // Usar username en lugar de email
-      formData.append('password', credentials.password);
-
-      const response = await httpClient.post<AuthResponse>('/auth/login', formData, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
+      // Enviar datos como JSON según tu backend
+      const response = await httpClient.post<{ access_token: string; token_type: string }>('/auth/login', {
+        username: credentials.username,
+        password: credentials.password,
       });
+
+      // Tu backend solo devuelve token, así que creamos un usuario temporal
+      // basado en los datos de login
+      const tempUser: User = {
+        id: 'temp-' + Date.now(), // ID temporal hasta que tengas un endpoint de perfil
+        username: credentials.username,
+        email: credentials.username.includes('@') ? credentials.username : `${credentials.username}@temp.com`,
+        created_at: new Date().toISOString(),
+      };
+
+      // Crear la respuesta de autenticación esperada por el frontend
+      const authResponse: AuthResponse = {
+        access_token: response.access_token,
+        token_type: response.token_type,
+        user: tempUser,
+      };
 
       // Guardar token y datos del usuario en localStorage
       setStorage(STORAGE_KEYS.ACCESS_TOKEN, response.access_token);
-      setStorage(STORAGE_KEYS.USER_DATA, response.user);
+      setStorage(STORAGE_KEYS.USER_DATA, tempUser);
 
-      return response;
+      return authResponse;
     } catch (error) {
       console.error('Error en login:', error);
       throw error;
@@ -42,7 +53,13 @@ class AuthService {
    */
   async register(userData: RegisterData): Promise<User> {
     try {
-      const response = await httpClient.post<User>('/auth/register', userData);
+      // Tu backend espera UserCreate y devuelve UserResponse
+      const response = await httpClient.post<User>('/auth/register', {
+        username: userData.username,
+        email: userData.email,
+        password: userData.password,
+      });
+      
       return response;
     } catch (error) {
       console.error('Error en registro:', error);
@@ -54,16 +71,9 @@ class AuthService {
    * Cierra la sesión del usuario
    */
   async logout(): Promise<void> {
-    try {
-      // Intentar cerrar sesión en el servidor
-      await httpClient.post('/auth/logout');
-    } catch (error) {
-      console.error('Error al cerrar sesión en el servidor:', error);
-      // Continuar con el logout local aunque falle el servidor
-    } finally {
-      // Limpiar datos locales
-      this.clearUserData();
-    }
+    // Tu backend no tiene endpoint de logout, 
+    // así que solo limpiamos los datos locales
+    this.clearUserData();
   }
 
   /**
@@ -71,15 +81,15 @@ class AuthService {
    * @returns Datos del usuario
    */
   async getCurrentUser(): Promise<User> {
-    try {
-      const response = await httpClient.get<User>('/auth/me');
-      // Actualizar datos del usuario en localStorage
-      setStorage(STORAGE_KEYS.USER_DATA, response);
-      return response;
-    } catch (error) {
-      console.error('Error al obtener usuario actual:', error);
-      throw error;
+    // Como tu backend no tiene endpoint /auth/me, 
+    // usamos directamente los datos guardados localmente
+    const userData = this.getUserData();
+    
+    if (!userData) {
+      throw new Error('No hay datos de usuario disponibles. Por favor, inicia sesión.');
     }
+    
+    return userData;
   }
 
   /**
@@ -88,15 +98,16 @@ class AuthService {
    * @returns Usuario actualizado
    */
   async updateProfile(userData: Partial<User>): Promise<User> {
-    try {
-      const response = await httpClient.put<User>('/auth/me', userData);
-      // Actualizar datos del usuario en localStorage
-      setStorage(STORAGE_KEYS.USER_DATA, response);
-      return response;
-    } catch (error) {
-      console.error('Error al actualizar perfil:', error);
-      throw error;
+    // Tu backend actual no tiene endpoint de actualización de perfil
+    // Por ahora, solo actualizamos los datos locales
+    const currentUser = this.getUserData();
+    if (!currentUser) {
+      throw new Error('No hay usuario autenticado');
     }
+    
+    const updatedUser = { ...currentUser, ...userData };
+    setStorage(STORAGE_KEYS.USER_DATA, updatedUser);
+    return updatedUser;
   }
 
   /**
@@ -105,15 +116,8 @@ class AuthService {
    * @param newPassword - Nueva contraseña
    */
   async changePassword(currentPassword: string, newPassword: string): Promise<void> {
-    try {
-      await httpClient.post('/auth/change-password', {
-        current_password: currentPassword,
-        new_password: newPassword,
-      });
-    } catch (error) {
-      console.error('Error al cambiar contraseña:', error);
-      throw error;
-    }
+    // Tu backend actual no tiene endpoint de cambio de contraseña
+    throw new Error('Funcionalidad de cambio de contraseña no disponible en el backend actual');
   }
 
   /**
@@ -122,8 +126,11 @@ class AuthService {
    */
   async verifyToken(): Promise<boolean> {
     try {
-      await this.getCurrentUser();
-      return true;
+      // Como no tienes endpoint /auth/me, verificamos si hay token y datos de usuario
+      const token = this.getAccessToken();
+      const userData = this.getUserData();
+      
+      return !!(token && userData);
     } catch {
       this.clearUserData();
       return false;
@@ -134,8 +141,23 @@ class AuthService {
    * Limpia todos los datos del usuario de localStorage
    */
   clearUserData(): void {
-    removeStorage(STORAGE_KEYS.ACCESS_TOKEN);
-    removeStorage(STORAGE_KEYS.USER_DATA);
+    try {
+      removeStorage(STORAGE_KEYS.ACCESS_TOKEN);
+      removeStorage(STORAGE_KEYS.USER_DATA);
+      
+      // También limpiar cualquier dato corrupto que pueda haber
+      if (typeof window !== 'undefined') {
+        const keys = Object.values(STORAGE_KEYS);
+        keys.forEach(key => {
+          const value = localStorage.getItem(key);
+          if (value === 'undefined' || value === 'null') {
+            localStorage.removeItem(key);
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Error al limpiar datos de usuario:', error);
+    }
   }
 
   /**
@@ -145,8 +167,13 @@ class AuthService {
   isAuthenticated(): boolean {
     if (typeof window === 'undefined') return false;
     
-    const token = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
-    return !!token;
+    try {
+      const token = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
+      return !!(token && token !== 'undefined' && token !== 'null');
+    } catch (error) {
+      console.error('Error al verificar autenticación:', error);
+      return false;
+    }
   }
 
   /**
@@ -156,7 +183,13 @@ class AuthService {
   getAccessToken(): string | null {
     if (typeof window === 'undefined') return null;
     
-    return localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
+    try {
+      const token = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
+      return token && token !== 'undefined' ? token : null;
+    } catch (error) {
+      console.error('Error al obtener token:', error);
+      return null;
+    }
   }
 
   /**
@@ -166,8 +199,16 @@ class AuthService {
   getUserData(): User | null {
     if (typeof window === 'undefined') return null;
     
-    const userData = localStorage.getItem(STORAGE_KEYS.USER_DATA);
-    return userData ? JSON.parse(userData) : null;
+    try {
+      const userData = localStorage.getItem(STORAGE_KEYS.USER_DATA);
+      if (!userData || userData === 'undefined') return null;
+      return JSON.parse(userData);
+    } catch (error) {
+      console.error('Error al parsear datos del usuario:', error);
+      // Limpiar datos corruptos
+      localStorage.removeItem(STORAGE_KEYS.USER_DATA);
+      return null;
+    }
   }
 }
 

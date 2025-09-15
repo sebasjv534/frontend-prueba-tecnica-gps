@@ -26,6 +26,21 @@ const config: Config = {
       fontFamily: {
         montserrat: ["var(--font-montserrat)", "sans-serif"],
       },
+      spacing: {
+        '160': '640px',
+        '335': '335px',
+        '907': '907px',
+      },
+      width: {
+        '160': '640px',
+        '246': '246px',
+        '385': '385px',
+        '907': '907px',
+      },
+      height: {
+        '335': '335px',
+        '63': '63px',
+      },
       animation: {
         "card-activate": "cardActivate 0.3s ease-in-out",
         "fade-in": "fadeIn 0.2s ease-in-out",

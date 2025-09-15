@@ -3,7 +3,7 @@
  */
 
 // Hook de autenticación (context)
-export { useAuth, AuthProvider } from '../context/AuthContext';
+export { useAuth, AuthProvider, ProtectedRoute } from '../context/AuthContext';
 
 // Hooks de datos
 export { useVehicles } from './useVehicles';

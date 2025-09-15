@@ -1,11 +1,12 @@
 import { ApiError as IApiError, FetchOptions, HttpMethod } from '@/types';
 import { getStorage, STORAGE_KEYS } from '@/utils';
+import { env } from '@/config/env';
 
 /**
  * Configuración base para la API
  */
 const API_CONFIG = {
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api',
+  baseURL: env.API_URL,
   timeout: 10000, // 10 segundos
   headers: {
     'Content-Type': 'application/json',

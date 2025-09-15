@@ -1,103 +1,281 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import { motion } from 'framer-motion';
+import Image from 'next/image';
+
+/**
+ * Componente para la animación lateral de círculos - Responsive
+ */
+function LateralAnimation() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Círculo animado principal */}
+      <motion.div
+        style={{
+          boxShadow: '0px 0px 55px 20px rgba(0, 0, 0, 0.25)',
+        }}
+        animate={{
+          scaleX: [1, 1.4, 2],
+          scaleY: [1, 1.3, 1.8],
+          x: ['100vw', '-50vw']
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          ease: "linear",
+        }}
+        className="absolute bg-white rounded-full
+                   w-[80vw] h-[80vw] 
+                   sm:w-[70vw] sm:h-[70vw] 
+                   md:w-[60vw] md:h-[60vw] 
+                   lg:w-[1112px] lg:h-[1112px] 
+                   -right-[40vw] sm:-right-[35vw] md:-right-[30vw] lg:-right-[556px]
+                   top-1/2 transform -translate-y-1/2"
+      />
+    </div>
+  );
+}
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+/**
+ * Página principal con diseño exacto de Figma - Responsive
+ */
+export default function HomePage() {
+  return (
+    <div className="relative w-full min-h-screen overflow-hidden bg-white">
+      {/* Animación lateral de círculos */}
+      <LateralAnimation />
+
+      {/* Logo vector en la esquina superior izquierda */}
+      <div
+        className="absolute z-10
+                   w-[56px] h-[55px]
+                   left-4 top-4
+                   sm:left-6 sm:top-6
+                   md:left-8 md:top-8
+                   lg:left-[58px] lg:top-[43px]"
+      >
+        <div className="relative w-full h-full rounded">
+          {/* SVG dentro ajustado sin deformar */}
+          <Image
+            src="/images/Imagologo_motion.svg"
+            alt="Logo Motion"
+            fill
+            className="object-contain p-1"
+            priority
+          />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+      </div>
+
+      {/* Contenido principal centrado */}
+      <div
+        className="relative z-10 flex flex-col 
+      items-center justify-center min-h-screen px-4 sm:px-6 md:px-8"
+      >
+        {/* Título "BIENVENIDO A" */}
+                {/* Título "BIENVENIDO A" */}
+        <motion.h1
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.3 }}
+          className="font-montserrat font-bold text-[#00249C] text-center mb-4
+                     text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[80px]
+                     leading-tight lg:leading-[100px]
+                     max-w-[90vw] lg:max-w-[800px]"
+          style={{
+            fontFamily: "Montserrat, sans-serif",
+            fontWeight: 700,
+          }}
+        >
+          BIENVENIDO A
+        </motion.h1>
+
+        {/* Título "MONITORING INNOVATION" */}
+        <motion.h2
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.6 }}
+          className="z-40 font-montserrat font-bold text-[#00249C] text-center
+                     text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-[55px]
+                     lg:max-w-[900px]"
+          style={{
+            fontFamily: "Montserrat, sans-serif",
+            fontWeight: 700,
+          }}
+        >
+          MONITORING INNOVATION
+        </motion.h2>
+
+        {/* Imagen del teléfono */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, delay: 0.9 }}
+          className="absolute
+                     w-[40vw] h-[48vh]
+                     sm:w-[45vw] sm:h-[54vh]
+                     md:w-[50vw] md:h-[60vh]
+                     lg:w-[55vw] lg:h-[66vh]
+                     xl:w-[65vw] xl:h-[68vh]
+                     left-1/2 top-[15vh]
+                     transform -translate-x-1/2" 
+          style={{
+            aspectRatio: '667/807'
+          }}
         >
           <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+            src="/images/Telefono-01.png"
+            alt="Aplicación móvil Motion"
+            fill
+            className="object-contain"
+            priority
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+        </motion.div>
+      </div>
+
+      {/* Enlaces del footer */}
+            {/* Enlaces del footer */}
+      <div className="absolute bottom-4 sm:bottom-6 md:bottom-8 lg:bottom-10 left-0 right-0 z-10">
+        <div className="flex flex-wrap justify-center items-center 
+                        gap-2 sm:gap-4 md:gap-6 lg:gap-8 xl:gap-12 
+                        px-2 sm:px-4 md:px-6 lg:px-8 xl:px-12
+                        max-w-full lg:max-w-[90vw] xl:max-w-[80vw] mx-auto">
+          <motion.a
+            href="https://monitoringinnovation.com/"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 1.2 }}
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+            className="font-montserrat font-medium text-[#01BEDB] text-center
+                       text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl
+                       hover:text-[#00249C] transition-colors cursor-pointer
+                       px-2 sm:px-3 md:px-4 py-2
+                       border-b border-transparent hover:border-[#00249C]
+                       min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[180px]"
+            style={{ fontFamily: "Montserrat, sans-serif" }}
+          >
+            MONITORING INNOVATION
+          </motion.a>
+
+          <motion.a
+            href="https://gpscontrol.co/"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 1.3 }}
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+            className="font-montserrat font-medium text-[#01BEDB] text-center
+                       text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl
+                       hover:text-[#00249C] transition-colors cursor-pointer
+                       px-2 sm:px-3 md:px-4 py-2
+                       border-b border-transparent hover:border-[#00249C]
+                       min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[180px]"
+            style={{ fontFamily: "Montserrat, sans-serif" }}
+          >
+            GPS CONTROL
+          </motion.a>
+
+          <motion.a
+            href="#"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 1.4 }}
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+            className="font-montserrat font-medium text-[#01BEDB] text-center
+                       text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl
+                       hover:text-[#00249C] transition-colors cursor-pointer
+                       px-2 sm:px-3 md:px-4 py-2
+                       border-b border-transparent hover:border-[#00249C]
+                       min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[180px]"
+            style={{ fontFamily: "Montserrat, sans-serif" }}
+          >
+            Link repo front
+          </motion.a>
+
+          <motion.a
+            href="https://github.com/sebasjv534/backend-prueba-tecnica-gps"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 1.5 }}
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+            className="font-montserrat font-medium text-[#01BEDB] text-center
+                       text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl
+                       hover:text-[#00249C] transition-colors cursor-pointer
+                       px-2 sm:px-3 md:px-4 py-2
+                       border-b border-transparent hover:border-[#00249C]
+                       min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[180px]"
+            style={{ fontFamily: "Montserrat, sans-serif" }}
+          >
+            Link repo back
+          </motion.a>
+        </div>
+      </div>
+
+      {/* Botones de navegación flotantes para móvil */}
+      <div className="fixed bottom-6 right-6 z-20 flex flex-col gap-3 lg:hidden">
+        <motion.a
+          href="/login"
+          initial={{ opacity: 0, x: 100 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 1.6 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="bg-gradient-to-r from-[#00249C] to-[#40CEE4] text-white px-6 py-3 rounded-full shadow-lg
+                     text-sm font-semibold hover:shadow-xl transition-all cursor-pointer
+                     hover:from-[#40CEE4] hover:to-[#00249C]"
         >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          Iniciar Sesión
+        </motion.a>
+
+        <motion.a
+          href="/register"
+          initial={{ opacity: 0, x: 100 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 1.7 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="bg-gradient-to-r from-[#C6007E] to-[#E280BE] text-white px-6 py-3 rounded-full shadow-lg
+                     text-sm font-semibold hover:shadow-xl transition-all cursor-pointer
+                     hover:from-[#E280BE] hover:to-[#C6007E]"
         >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          Registrarse
+        </motion.a>
+      </div>
+
+      {/* Botones de navegación para desktop */}
+      <div className="hidden lg:block absolute top-8 right-8 z-20">
+        <div className="flex gap-4">
+          <motion.a
+            href="/login"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 1.6 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="bg-gradient-to-r from-[#00249C] to-[#40CEE4] text-white px-8 py-3 rounded-lg shadow-lg
+                       font-semibold hover:shadow-xl transition-all cursor-pointer
+                       hover:from-[#40CEE4] hover:to-[#00249C]"
+          >
+            Iniciar Sesión
+          </motion.a>
+
+          <motion.a
+            href="/register"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 1.7 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="bg-gradient-to-r from-[#C6007E] to-[#E280BE] text-white px-8 py-3 rounded-lg shadow-lg
+                       font-semibold hover:shadow-xl transition-all cursor-pointer
+                       hover:from-[#E280BE] hover:to-[#C6007E]"
+          >
+            Registrarse
+          </motion.a>
+        </div>
+      </div>
     </div>
   );
 }

@@ -59,16 +59,23 @@ export function AuthProvider({ children }: AuthProviderProps) {
           try {
             const currentUser = await authService.getCurrentUser();
             setUser(currentUser);
-          } catch (error) {
+          } catch (error: any) {
+            console.warn('No se pudo obtener usuario del servidor, usando datos locales');
+            
             // Si falla, usar datos del localStorage como fallback
             const userData = authService.getUserData();
             if (userData) {
               setUser(userData);
             } else {
               // Si no hay datos válidos, limpiar todo
+              console.warn('No hay datos de usuario válidos, limpiando autenticación');
               authService.clearUserData();
+              setError('Sesión expirada. Por favor, inicia sesión nuevamente.');
             }
           }
+        } else {
+          // Si no hay token, asegurar que no hay datos residuales
+          authService.clearUserData();
         }
       } catch (error) {
         console.error('Error al inicializar autenticación:', error);
@@ -79,7 +86,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
       }
     };
 
-    initializeAuth();
+    // Solo ejecutar en el cliente para evitar problemas de hidratación
+    if (typeof window !== 'undefined') {
+      initializeAuth();
+    } else {
+      setIsLoading(false);
+    }
   }, []);
 
   /**
@@ -188,4 +200,44 @@ export function useAuth(): AuthContextType {
   }
   
   return context;
+}
+
+/**
+ * Componente para proteger rutas que requieren autenticación
+ */
+interface ProtectedRouteProps {
+  children: ReactNode;
+  redirectTo?: string;
+}
+
+export function ProtectedRoute({ children, redirectTo = '/login' }: ProtectedRouteProps) {
+  const { isAuthenticated, isLoading } = useAuth();
+  
+  // Mostrar loading mientras se verifica la autenticación
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-primary-blue1 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-gray-600">Verificando autenticación...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Si no está autenticado, redirigir
+  if (!isAuthenticated) {
+    if (typeof window !== 'undefined') {
+      window.location.href = redirectTo;
+    }
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <p className="text-gray-600">Redirigiendo al login...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return <>{children}</>;
 }
