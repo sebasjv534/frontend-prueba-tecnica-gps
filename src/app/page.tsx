@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { IMAGE_PATHS } from '@/utils/imagePath';
+import { IMAGE_PATHS, getRoutePath } from '@/utils';
 
 /**
  * Componente para la animación lateral de círculos - Responsive
@@ -65,11 +65,8 @@ export default function HomePage() {
             className="object-contain p-1"
             priority
           />
-              </div>
-            </div>
-          </div>
-        );
-      }
+        </div>
+      </div>
 
       {/* Contenido principal centrado */}
       <div
@@ -220,64 +217,71 @@ export default function HomePage() {
 
       {/* Botones de navegación flotantes para móvil */}
       <div className="fixed bottom-6 right-6 z-20 flex flex-col gap-3 lg:hidden">
-        <motion.a
-          href="/login"
-          initial={{ opacity: 0, x: 100 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, delay: 1.6 }}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="bg-gradient-to-r from-[#00249C] to-[#40CEE4] text-white px-6 py-3 rounded-full shadow-lg
-                     text-sm font-semibold hover:shadow-xl transition-all cursor-pointer
-                     hover:from-[#40CEE4] hover:to-[#00249C]"
-        >
-          Iniciar Sesión
-        </motion.a>
+        <Link href={getRoutePath('/login')}>
+          <motion.div
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 1.6 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="bg-gradient-to-r from-[#00249C] to-[#40CEE4] text-white px-6 py-3 rounded-full shadow-lg
+                       text-sm font-semibold hover:shadow-xl transition-all cursor-pointer
+                       hover:from-[#40CEE4] hover:to-[#00249C]"
+          >
+            Iniciar Sesión
+          </motion.div>
+        </Link>
 
-        <motion.a
-          href="/register"
-          initial={{ opacity: 0, x: 100 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, delay: 1.7 }}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="bg-gradient-to-r from-[#C6007E] to-[#E280BE] text-white px-6 py-3 rounded-full shadow-lg
-                     text-sm font-semibold hover:shadow-xl transition-all cursor-pointer
-                     hover:from-[#E280BE] hover:to-[#C6007E]"
-        >
-          Registrarse
-        </motion.a>
+        <Link href={getRoutePath('/register')}>
+          <motion.div
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 1.7 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="bg-gradient-to-r from-[#C6007E] to-[#E280BE] text-white px-6 py-3 rounded-full shadow-lg
+                       text-sm font-semibold hover:shadow-xl transition-all cursor-pointer
+                       hover:from-[#E280BE] hover:to-[#C6007E]"
+          >
+            Registrarse
+          </motion.div>
+        </Link>
       </div>
 
       {/* Botones de navegación para desktop */}
       <div className="hidden lg:block absolute top-8 right-8 z-20">
         <div className="flex gap-4">
-          <motion.a
-            href="/login"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 1.6 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-gradient-to-r from-[#00249C] to-[#40CEE4] text-white px-8 py-3 rounded-lg shadow-lg
-                       font-semibold hover:shadow-xl transition-all cursor-pointer
-                       hover:from-[#40CEE4] hover:to-[#00249C]"
-          >
-            Iniciar Sesión
-          </motion.a>
+          <Link href={getRoutePath('/login')}>
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 1.6 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-gradient-to-r from-[#00249C] to-[#40CEE4] text-white px-8 py-3 rounded-lg shadow-lg
+                         font-semibold hover:shadow-xl transition-all cursor-pointer
+                         hover:from-[#40CEE4] hover:to-[#00249C]"
+            >
+              Iniciar Sesión
+            </motion.div>
+          </Link>
 
-          <motion.a
-            href="/register"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 1.7 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-gradient-to-r from-[#C6007E] to-[#E280BE] text-white px-8 py-3 rounded-lg shadow-lg
-                       font-semibold hover:shadow-xl transition-all cursor-pointer
-                       hover:from-[#E280BE] hover:to-[#C6007E]"
-          >
-            Registrarse
-          </motion.a>
+          <Link href={getRoutePath('/register')}>
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 1.7 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-gradient-to-r from-[#C6007E] to-[#E280BE] text-white px-8 py-3 rounded-lg shadow-lg
+                         font-semibold hover:shadow-xl transition-all cursor-pointer
+                         hover:from-[#E280BE] hover:to-[#C6007E]"
+            >
+              Registrarse
+            </motion.div>
+          </Link>
         </div>
       </div>
+    </div>
+  );
+}
