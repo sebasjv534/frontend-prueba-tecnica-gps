@@ -8,6 +8,7 @@ import { useAuth, useVehicles, ProtectedRoute } from '@/hooks';
 import { Vehicle } from '@/types';
 import { IMAGE_PATHS } from '@/utils/imagePath';
 import { getRoutePath } from '@/utils/routePath';
+import Link from 'next/link';
 
 /**
  * Componente para el navbar del dashboard
@@ -18,8 +19,7 @@ function DashboardNavbar() {
 
   const handleLogout = async () => {
     // Redirigir primero usando getRoutePath para manejar basePath correctamente
-    router.push(getRoutePath('/'));
-    await logout();
+    <Link href={getRoutePath('/')} />;
   };
 
   return (
