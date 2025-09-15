@@ -14,6 +14,7 @@ export interface User {
 export interface LoginCredentials {
   username: string; // Cambio: usar username en lugar de email
   password: string;
+  [key: string]: string; // Index signature para compatibilidad con FormValues
 }
 
 /**
@@ -23,6 +24,7 @@ export interface RegisterData {
   username: string;
   email: string;
   password: string;
+  [key: string]: string; // Index signature para compatibilidad con FormValues
 }
 
 /**

@@ -74,5 +74,5 @@ export function useAuthToken() {
  * Hook para datos de usuario
  */
 export function useUserData() {
-  return useLocalStorage<any | null>('user_data', null);
+  return useLocalStorage<Record<string, unknown> | null>('user_data', null);
 }

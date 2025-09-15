@@ -5,7 +5,7 @@ import { useState, ChangeEvent, FormEvent } from 'react';
 /**
  * Tipo genérico para valores de formulario
  */
-type FormValues = Record<string, any>;
+type FormValues = Record<string, string | number | boolean>;
 
 /**
  * Tipo para errores de validación
@@ -133,7 +133,7 @@ export function useForm<T extends FormValues>(
   /**
    * Establece un valor específico
    */
-  const setValue = (name: keyof T, value: any) => {
+  const setValue = (name: keyof T, value: T[keyof T]) => {
     setValues(prev => ({
       ...prev,
       [name]: value,

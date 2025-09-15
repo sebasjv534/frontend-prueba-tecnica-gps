@@ -59,7 +59,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           try {
             const currentUser = await authService.getCurrentUser();
             setUser(currentUser);
-          } catch (error: any) {
+          } catch (error: unknown) {
             console.warn('No se pudo obtener usuario del servidor, usando datos locales');
             
             // Si falla, usar datos del localStorage como fallback
