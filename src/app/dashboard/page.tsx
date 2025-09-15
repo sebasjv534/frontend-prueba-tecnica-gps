@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useAuth, useVehicles, ProtectedRoute } from '@/hooks';
 import { Vehicle } from '@/types';
-import { getRoutePath, IMAGE_PATHS } from '@/utils';
+import { IMAGE_PATHS } from '@/utils/imagePath';
 
 /**
  * Componente para el navbar del dashboard
@@ -17,7 +17,7 @@ function DashboardNavbar() {
 
   const handleLogout = async () => {
     await logout();
-    router.push(getRoutePath('/'));
+    router.push('/home');
   };
 
   return (
@@ -177,8 +177,9 @@ export default function DashboardPage() {
     
     // Resetear validaciones visuales
     const inputs = document.querySelectorAll('input[type="text"]');
-    inputs.forEach((input: any) => {
-      input.style.borderColor = '#C5C5C5';
+    inputs.forEach((input: Element) => {
+      const inputElement = input as HTMLInputElement;
+      inputElement.style.borderColor = '#C5C5C5';
     });
   };
 
