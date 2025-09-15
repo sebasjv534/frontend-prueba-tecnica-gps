@@ -801,14 +801,14 @@ export default function DashboardPage() {
         )}
 
         {/* Logo inferior centrado - posicionado en la parte inferior */}
-        <div className="w-full flex justify-center items-end min-h-[120px] pb-4">
+        <div className="w-full flex justify-center items-end min-h-[250px] pb-4">
           <div className="max-w-xs">
             <Image
               src="/images/Imagologotipo_motion.svg"
               alt="Logo Motion"
               width={200}
               height={80}
-              className="w-auto h-12 opacity-40 hover:opacity-70 transition-opacity duration-300"
+              className="w-auto h-12  hover:opacity-70 transition-opacity duration-300"
               priority={false}
             />
           </div>
