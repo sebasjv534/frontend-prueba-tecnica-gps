@@ -3,13 +3,13 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  
+  /* Colores personalizados del diseño */
+  --primary-blue-1: #00249C;
+  --primary-blue-2: #40CEE4;
+  --secondary-red-1: #C6007E;
+  --secondary-red-2: #E280BE;
+  --neutral-gray: #C5C5C5;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,5 +22,56 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-montserrat), Arial, Helvetica, sans-serif;
+}
+
+/* Estilos personalizados para componentes */
+.card-hover {
+  transition: all 0.3s ease-in-out;
+}
+
+.card-hover:hover {
+  animation: cardActivate 0.3s ease-in-out;
+}
+
+/* Utilidades para botones */
+.btn-primary {
+  background-color: #00249C;
+  color: white;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: #40CEE4;
+}
+
+.btn-secondary {
+  background-color: #C6007E;
+  color: white;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+  background-color: #E280BE;
+}
+
+.btn-outline {
+  border: 2px solid #00249C;
+  color: #00249C;
+  background-color: transparent;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+}
+
+.btn-outline:hover {
+  background-color: #00249C;
+  color: white;
 }
