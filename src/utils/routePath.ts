@@ -1,6 +1,6 @@
 // Helper para manejar rutas con basePath en producción
 export function getRoutePath(route: string): string {
-  // GitHub Pages ya maneja el basePath automáticamente
-  // Solo devolvemos la ruta tal como está
+  // En GitHub Pages, Next.js maneja automáticamente el basePath
+  // configurado en next.config.ts, NO debemos agregarlo manualmente
   return route;
 }
