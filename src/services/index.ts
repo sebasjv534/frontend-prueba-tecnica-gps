@@ -2,12 +2,12 @@
  * Exportaciones de servicios
  */
 
-// Cliente API base
-export { apiClient } from './api';
+// Cliente HTTP base
+export { httpClient } from './httpClient';
 
 // Servicios
-export { AuthService, authService } from './auth';
-export { VehicleService, vehicleService } from './vehicles';
+export { authService } from './authService';
+export { vehicleService } from './vehicleService';
 
 // Re-exportar tipos
 export type { LoginCredentials, RegisterData, AuthResponse, User } from '@/types/auth';

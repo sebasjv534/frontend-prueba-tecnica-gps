@@ -1,4 +1,4 @@
-import { Vehicle, VehicleInput, VehicleFilters, PaginatedResponse } from '@/types';
+import { Vehicle, CreateVehicle, UpdateVehicle } from '@/types';
 import { httpClient } from './httpClient';
 
 /**
@@ -6,31 +6,12 @@ import { httpClient } from './httpClient';
  */
 class VehicleService {
   /**
-   * Obtiene la lista de vehículos con filtros opcionales
-   * @param filters - Filtros de búsqueda
-   * @param page - Número de página (por defecto 1)
-   * @param perPage - Elementos por página (por defecto 10)
-   * @returns Lista paginada de vehículos
+   * Obtiene la lista de todos los vehículos
+   * @returns Lista de vehículos
    */
-  async getVehicles(
-    filters: VehicleFilters = {},
-    page: number = 1,
-    perPage: number = 10
-  ): Promise<PaginatedResponse<Vehicle>> {
+  async getVehicles(): Promise<Vehicle[]> {
     try {
-      const params = new URLSearchParams({
-        page: page.toString(),
-        per_page: perPage.toString(),
-        ...Object.fromEntries(
-          Object.entries(filters)
-            .filter(([, value]) => value !== undefined && value !== '')
-            .map(([key, value]) => [key, value.toString()])
-        ),
-      });
-
-      const response = await httpClient.get<PaginatedResponse<Vehicle>>(
-        `/vehicles?${params.toString()}`
-      );
+      const response = await httpClient.get<Vehicle[]>('/vehicles');
       return response;
     } catch (error) {
       console.error('Error al obtener vehículos:', error);
@@ -40,10 +21,10 @@ class VehicleService {
 
   /**
    * Obtiene un vehículo por su ID
-   * @param id - ID del vehículo
+   * @param id - ID del vehículo (UUID)
    * @returns Datos del vehículo
    */
-  async getVehicleById(id: number): Promise<Vehicle> {
+  async getVehicleById(id: string): Promise<Vehicle> {
     try {
       const response = await httpClient.get<Vehicle>(`/vehicles/${id}`);
       return response;
@@ -58,7 +39,7 @@ class VehicleService {
    * @param vehicleData - Datos del vehículo a crear
    * @returns Vehículo creado
    */
-  async createVehicle(vehicleData: VehicleInput): Promise<Vehicle> {
+  async createVehicle(vehicleData: CreateVehicle): Promise<Vehicle> {
     try {
       const response = await httpClient.post<Vehicle>('/vehicles', vehicleData);
       return response;
@@ -70,11 +51,11 @@ class VehicleService {
 
   /**
    * Actualiza un vehículo existente
-   * @param id - ID del vehículo
+   * @param id - ID del vehículo (UUID)
    * @param vehicleData - Datos actualizados del vehículo
    * @returns Vehículo actualizado
    */
-  async updateVehicle(id: number, vehicleData: Partial<VehicleInput>): Promise<Vehicle> {
+  async updateVehicle(id: string, vehicleData: UpdateVehicle): Promise<Vehicle> {
     try {
       const response = await httpClient.put<Vehicle>(`/vehicles/${id}`, vehicleData);
       return response;
@@ -86,9 +67,9 @@ class VehicleService {
 
   /**
    * Elimina un vehículo
-   * @param id - ID del vehículo a eliminar
+   * @param id - ID del vehículo a eliminar (UUID)
    */
-  async deleteVehicle(id: number): Promise<void> {
+  async deleteVehicle(id: string): Promise<void> {
     try {
       await httpClient.delete(`/vehicles/${id}`);
     } catch (error) {
@@ -98,93 +79,22 @@ class VehicleService {
   }
 
   /**
-   * Cambia el estado de disponibilidad de un vehículo
-   * @param id - ID del vehículo
-   * @param disponible - Nuevo estado de disponibilidad
-   * @returns Vehículo actualizado
-   */
-  async toggleAvailability(id: number, disponible: boolean): Promise<Vehicle> {
-    try {
-      const response = await httpClient.patch<Vehicle>(`/vehicles/${id}`, { disponible });
-      return response;
-    } catch (error) {
-      console.error(`Error al cambiar disponibilidad del vehículo ${id}:`, error);
-      throw error;
-    }
-  }
-
-  /**
-   * Obtiene vehículos del usuario actual
-   * @param page - Número de página
-   * @param perPage - Elementos por página
-   * @returns Lista paginada de vehículos del usuario
-   */
-  async getMyVehicles(page: number = 1, perPage: number = 10): Promise<PaginatedResponse<Vehicle>> {
-    try {
-      const params = new URLSearchParams({
-        page: page.toString(),
-        per_page: perPage.toString(),
-      });
-
-      const response = await httpClient.get<PaginatedResponse<Vehicle>>(
-        `/vehicles/my?${params.toString()}`
-      );
-      return response;
-    } catch (error) {
-      console.error('Error al obtener mis vehículos:', error);
-      throw error;
-    }
-  }
-
-  /**
    * Busca vehículos por término de búsqueda
    * @param searchTerm - Término de búsqueda
-   * @param page - Número de página
-   * @param perPage - Elementos por página
-   * @returns Lista paginada de vehículos que coinciden con la búsqueda
+   * @returns Lista de vehículos que coinciden con la búsqueda
    */
-  async searchVehicles(
-    searchTerm: string,
-    page: number = 1,
-    perPage: number = 10
-  ): Promise<PaginatedResponse<Vehicle>> {
+  async searchVehicles(searchTerm: string): Promise<Vehicle[]> {
     try {
       const params = new URLSearchParams({
         search: searchTerm,
-        page: page.toString(),
-        per_page: perPage.toString(),
       });
 
-      const response = await httpClient.get<PaginatedResponse<Vehicle>>(
+      const response = await httpClient.get<Vehicle[]>(
         `/vehicles/search?${params.toString()}`
       );
       return response;
     } catch (error) {
       console.error('Error al buscar vehículos:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * Obtiene estadísticas de vehículos
-   * @returns Estadísticas básicas
-   */
-  async getVehicleStats(): Promise<{
-    total: number;
-    disponibles: number;
-    no_disponibles: number;
-    por_marca: Record<string, number>;
-  }> {
-    try {
-      const response = await httpClient.get<{
-        total: number;
-        disponibles: number;
-        no_disponibles: number;
-        por_marca: Record<string, number>;
-      }>('/vehicles/stats');
-      return response;
-    } catch (error) {
-      console.error('Error al obtener estadísticas:', error);
       throw error;
     }
   }

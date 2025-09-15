@@ -7,7 +7,7 @@ import { httpClient } from './httpClient';
  */
 class AuthService {
   /**
-   * Inicia sesión con email y contraseña
+   * Inicia sesión con username y contraseña
    * @param credentials - Credenciales de login
    * @returns Respuesta de autenticación
    */
@@ -15,7 +15,7 @@ class AuthService {
     try {
       // El backend espera los datos como FormData para OAuth2
       const formData = new FormData();
-      formData.append('username', credentials.email); // OAuth2 usa 'username'
+      formData.append('username', credentials.username); // Usar username en lugar de email
       formData.append('password', credentials.password);
 
       const response = await httpClient.post<AuthResponse>('/auth/login', formData, {
