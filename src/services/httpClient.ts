@@ -7,7 +7,9 @@ import { env } from '@/config/env';
  */
 const API_CONFIG = {
   baseURL: env.API_URL,
-  timeout: 10000, // 10 segundos
+  timeout: env.IS_PRODUCTION ? 30000 : 15000, // 30s en prod, 15s en dev
+  retryAttempts: 3,
+  retryDelay: 1000, // 1 segundo entre reintentos
   headers: {
     'Content-Type': 'application/json',
   },
@@ -75,7 +77,29 @@ class HttpClient {
   }
 
   /**
-   * Realiza una petición HTTP genérica
+   * Función auxiliar para hacer reintentos con delay exponencial
+   */
+  private async sleep(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  /**
+   * Determina si un error es reintentable
+   */
+  private isRetryableError(error: unknown): boolean {
+    if (error instanceof ApiError) {
+      // Reintentar para errores de timeout, conexión o errores del servidor
+      return error.status === 408 || error.status === 0 || error.status >= 500;
+    }
+    if (error instanceof Error) {
+      // Reintentar para errores de red o timeout
+      return error.name === 'AbortError' || error.name === 'TypeError';
+    }
+    return false;
+  }
+
+  /**
+   * Realiza una petición HTTP genérica con reintentos automáticos
    */
   private async request<T>(
     endpoint: string,
@@ -84,7 +108,12 @@ class HttpClient {
     options: FetchOptions = {}
   ): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
-    const { timeout = API_CONFIG.timeout, headers: customHeaders, ...restOptions } = options;
+    const { 
+      timeout = API_CONFIG.timeout, 
+      headers: customHeaders, 
+      retryAttempts = API_CONFIG.retryAttempts,
+      ...restOptions 
+    } = options;
 
     const config: RequestInit = {
       method,
@@ -96,32 +125,67 @@ class HttpClient {
       config.body = JSON.stringify(data);
     }
 
-    try {
-      // Crear un AbortController para el timeout
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), timeout);
+    let lastError: unknown;
 
-      config.signal = controller.signal;
+    // Intentar la petición con reintentos
+    for (let attempt = 1; attempt <= retryAttempts; attempt++) {
+      let timeoutId: NodeJS.Timeout | undefined;
+      
+      try {
+        console.log(`🔄 Intento ${attempt}/${retryAttempts} para ${method} ${endpoint}`);
+        
+        // Crear un AbortController para el timeout
+        const controller = new AbortController();
+        timeoutId = setTimeout(() => controller.abort(), timeout);
 
-      const response = await fetch(url, config);
-      clearTimeout(timeoutId);
+        config.signal = controller.signal;
 
-      return await this.handleResponse<T>(response);
-    } catch (error) {
-      if (error instanceof Error) {
-        if (error.name === 'AbortError') {
-          throw new ApiError({
-            message: 'La petición ha excedido el tiempo límite',
-            status: 408,
-          });
+        const response = await fetch(url, config);
+        clearTimeout(timeoutId);
+
+        const result = await this.handleResponse<T>(response);
+        
+        if (attempt > 1) {
+          console.log(`✅ Petición exitosa después de ${attempt} intentos`);
         }
+        
+        return result;
+      } catch (error) {
+        lastError = error;
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
+
+        console.warn(`❌ Intento ${attempt} fallido:`, error);
+
+        // Si no es el último intento y el error es reintentable
+        if (attempt < retryAttempts && this.isRetryableError(error)) {
+          const delay = API_CONFIG.retryDelay * Math.pow(2, attempt - 1); // Delay exponencial
+          console.log(`⏳ Esperando ${delay}ms antes del siguiente intento...`);
+          await this.sleep(delay);
+          continue;
+        }
+
+        // Si llegamos aquí, no hay más reintentos o el error no es reintentable
+        break;
+      }
+    }
+
+    // Manejar el último error
+    if (lastError instanceof Error) {
+      if (lastError.name === 'AbortError') {
         throw new ApiError({
-          message: error.message || 'Error de conexión',
-          status: 0,
+          message: 'La petición ha excedido el tiempo límite. Verifique su conexión e intente nuevamente.',
+          status: 408,
         });
       }
-      throw error;
+      throw new ApiError({
+        message: lastError.message || 'Error de conexión. Verifique su conexión e intente nuevamente.',
+        status: 0,
+      });
     }
+    
+    throw lastError;
   }
 
   /**
