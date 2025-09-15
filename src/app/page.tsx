@@ -2,7 +2,8 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { getRoutePath, IMAGE_PATHS } from '@/utils';
+import Link from 'next/link';
+import { IMAGE_PATHS } from '@/utils/imagePath';
 
 /**
  * Componente para la animación lateral de círculos - Responsive
@@ -64,8 +65,11 @@ export default function HomePage() {
             className="object-contain p-1"
             priority
           />
-        </div>
-      </div>
+              </div>
+            </div>
+          </div>
+        );
+      }
 
       {/* Contenido principal centrado */}
       <div
@@ -217,7 +221,7 @@ export default function HomePage() {
       {/* Botones de navegación flotantes para móvil */}
       <div className="fixed bottom-6 right-6 z-20 flex flex-col gap-3 lg:hidden">
         <motion.a
-          href={getRoutePath("/login")}
+          href="/login"
           initial={{ opacity: 0, x: 100 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, delay: 1.6 }}
@@ -231,7 +235,7 @@ export default function HomePage() {
         </motion.a>
 
         <motion.a
-          href={getRoutePath("/register")}
+          href="/register"
           initial={{ opacity: 0, x: 100 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, delay: 1.7 }}
@@ -249,7 +253,7 @@ export default function HomePage() {
       <div className="hidden lg:block absolute top-8 right-8 z-20">
         <div className="flex gap-4">
           <motion.a
-            href={getRoutePath("/login")}
+            href="/login"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 1.6 }}
@@ -263,7 +267,7 @@ export default function HomePage() {
           </motion.a>
 
           <motion.a
-            href={getRoutePath("/register")}
+            href="/register"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 1.7 }}
@@ -277,6 +281,3 @@ export default function HomePage() {
           </motion.a>
         </div>
       </div>
-    </div>
-  );
-}
