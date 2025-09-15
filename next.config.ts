@@ -6,8 +6,6 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true
   },
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/frontend-prueba-tecnica-gps/' : '',
-  basePath: process.env.NODE_ENV === 'production' ? '/frontend-prueba-tecnica-gps' : '',
   eslint: {
     ignoreDuringBuilds: true,
   },
