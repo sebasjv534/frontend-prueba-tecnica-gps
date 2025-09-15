@@ -7,7 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useAuth, useForm } from '@/hooks';
 import { RegisterData } from '@/types';
-import { validateRegisterData, getRoutePath } from '@/utils';
+import { validateRegisterData, getRoutePath, IMAGE_PATHS } from '@/utils';
 
 /**
  * Componente para la animación lateral de círculos - Responsive
@@ -86,7 +86,7 @@ export default function RegisterPage() {
       >
         <Link href={getRoutePath("/")} className="inline-block">
           <Image
-            src="/images/Imagologo_motion.svg"
+            src={IMAGE_PATHS.LOGO_MOTION}
             alt="Logo Motion"
             width={56}
             height={55}
@@ -158,7 +158,7 @@ export default function RegisterPage() {
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <Image
-                      src="/images/Icon_persona.svg"
+                      src={IMAGE_PATHS.ICON_PERSONA}
                       alt="Usuario"
                       width={20}
                       height={20}

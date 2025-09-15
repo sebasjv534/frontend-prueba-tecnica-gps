@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { getRoutePath } from '@/utils';
+import { getRoutePath, IMAGE_PATHS } from '@/utils';
 
 /**
  * Componente para la animación lateral de círculos - Responsive
@@ -58,7 +58,7 @@ export default function HomePage() {
         <div className="relative w-full h-full rounded">
           {/* SVG dentro ajustado sin deformar */}
           <Image
-            src="/images/Imagologo_motion.svg"
+            src={IMAGE_PATHS.LOGO_MOTION}
             alt="Logo Motion"
             fill
             className="object-contain p-1"
@@ -124,7 +124,7 @@ export default function HomePage() {
           }}
         >
           <Image
-            src="/images/Telefono-01.png"
+            src={IMAGE_PATHS.PHONE}
             alt="Aplicación móvil Motion"
             fill
             className="object-contain"

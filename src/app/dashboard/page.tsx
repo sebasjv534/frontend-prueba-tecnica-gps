@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useAuth, useVehicles, ProtectedRoute } from '@/hooks';
 import { Vehicle } from '@/types';
-import { getRoutePath } from '@/utils';
+import { getRoutePath, IMAGE_PATHS } from '@/utils';
 
 /**
  * Componente para el navbar del dashboard
@@ -27,7 +27,7 @@ function DashboardNavbar() {
           {/* Logo */}
           <div className="flex items-center">
             <Image
-              src="/images/Imagologotipo_motion.svg"
+              src={IMAGE_PATHS.LOGO_TYPE_MOTION}
               alt="Logo Motion"
               width={120}
               height={40}
@@ -330,7 +330,7 @@ export default function DashboardPage() {
                   }}
                 >
                   <Image
-                    src="/images/Icon_crear.svg"
+                    src={IMAGE_PATHS.ICON_CREAR}
                     alt="Crear"
                     width={34}
                     height={34}
@@ -359,7 +359,7 @@ export default function DashboardPage() {
                         }}
                       >
                         <img 
-                          src="/images/Icon_vehiculo1.svg" 
+                          src={IMAGE_PATHS.ICON_VEHICULO1} 
                           alt="Vehículo"
                           className="w-8 h-8"
                         />
@@ -411,7 +411,7 @@ export default function DashboardPage() {
                         }}
                       >
                         <img 
-                          src="/images/Icon_puntoubicacion1.svg" 
+                          src={IMAGE_PATHS.ICON_UBICACION1} 
                           alt="Ubicación"
                           className="w-8 h-8"
                         />
@@ -463,7 +463,7 @@ export default function DashboardPage() {
                         }}
                       >
                         <img 
-                          src="/images/Icon_persona1.svg" 
+                          src={IMAGE_PATHS.ICON_PERSONA1} 
                           alt="Persona"
                           className="w-8 h-8"
                         />
@@ -526,7 +526,7 @@ export default function DashboardPage() {
                             title="Cancelar operación"
                           >
                             <img 
-                              src="/images/Icon_cancelar.svg" 
+                              src={IMAGE_PATHS.ICON_CANCELAR} 
                               alt="Cancelar"
                               className="w-6 h-6"
                             />
@@ -542,7 +542,7 @@ export default function DashboardPage() {
                             title={isTableDeleteMode ? "Confirmar eliminación" : "Confirmar edición"}
                           >
                             <img 
-                              src="/images/Icon_confirmar.svg" 
+                              src={IMAGE_PATHS.ICON_CONFIRMAR} 
                               alt="Confirmar"
                               className="w-6 h-6"
                             />
@@ -570,7 +570,7 @@ export default function DashboardPage() {
                             whileTap={{ scale: 0.98 }}
                           >
                             <img 
-                              src="/images/Icon_cancelar.svg" 
+                              src={IMAGE_PATHS.ICON_CANCELAR} 
                               alt="Cancelar"
                               className="w-4 h-4 transition-all duration-200"
                               style={{
@@ -599,7 +599,7 @@ export default function DashboardPage() {
                             whileTap={{ scale: 0.98 }}
                           >
                             <img 
-                              src="/images/Icon_confirmar.svg" 
+                              src={IMAGE_PATHS.ICON_CONFIRMAR} 
                               alt="Confirmar"
                               className="w-4 h-4 transition-all duration-200"
                               style={{
@@ -695,7 +695,7 @@ export default function DashboardPage() {
                               }}
                             >
                               <Image
-                                src="/images/Icon_editar1.svg"
+                                src={IMAGE_PATHS.ICON_EDITAR1}
                                 alt="Editar"
                                 width={38}
                                 height={38}
@@ -718,7 +718,7 @@ export default function DashboardPage() {
                               }}
                             >
                               <Image
-                                src="/images/Icon_eliminar1.svg"
+                                src={IMAGE_PATHS.ICON_ELIMINAR1}
                                 alt="Eliminar"
                                 width={38}
                                 height={38}
@@ -805,7 +805,7 @@ export default function DashboardPage() {
         <div className="w-full flex justify-center items-end min-h-[250px] pb-4">
           <div className="max-w-xs">
             <Image
-              src="/images/Imagologotipo_motion.svg"
+              src={IMAGE_PATHS.LOGO_TYPE_MOTION}
               alt="Logo Motion"
               width={200}
               height={80}
