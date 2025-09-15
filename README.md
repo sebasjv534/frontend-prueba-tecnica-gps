@@ -66,7 +66,7 @@ npm run dev
 2. Haz clic en "Registrarse" 
 3. Completa el formulario con:
    - Nombre de usuario único
-   - Contraseña segura (mínimo 6 caracteres)
+   - Contraseña segura (mínimo 8 caracteres)
 4. El sistema validará automáticamente la disponibilidad del usuario
 5. Una vez registrado, serás redirigido al dashboard
 
