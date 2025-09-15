@@ -2,18 +2,27 @@
  * Configuración de variables de entorno
  */
 
-// URL base de la API - fallback hardcodeado para producción
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://backend-prueba-tecnica-gps.onrender.com/api/v1';
-const APP_ENVIRONMENT = process.env.NEXT_PUBLIC_APP_ENV || 'production';
+// Validar variables de entorno requeridas
+const requiredEnvVars = {
+  NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+  NEXT_PUBLIC_APP_ENV: process.env.NEXT_PUBLIC_APP_ENV || 'development',
+} as const;
+
+// Verificar que las variables requeridas estén definidas
+for (const [key, value] of Object.entries(requiredEnvVars)) {
+  if (!value && key === 'NEXT_PUBLIC_API_URL') {
+    console.warn(`⚠️  Variable de entorno requerida no definida: ${key}`);
+  }
+}
 
 export const env = {
   // API Configuration
-  API_URL: API_BASE_URL,
-  APP_ENV: APP_ENVIRONMENT,
+  API_URL: requiredEnvVars.NEXT_PUBLIC_API_URL || 'https://backend-prueba-tecnica-gps.onrender.com/api/v1',
+  APP_ENV: requiredEnvVars.NEXT_PUBLIC_APP_ENV,
   
   // Configuración derivada
-  IS_DEVELOPMENT: APP_ENVIRONMENT === 'development',
-  IS_PRODUCTION: APP_ENVIRONMENT === 'production',
+  IS_DEVELOPMENT: requiredEnvVars.NEXT_PUBLIC_APP_ENV === 'development',
+  IS_PRODUCTION: requiredEnvVars.NEXT_PUBLIC_APP_ENV === 'production',
   
   // URLs de API específicas basadas en tu estructura
   API_ENDPOINTS: {
@@ -36,11 +45,11 @@ export const validateConfig = () => {
   const errors: string[] = [];
   
   if (!env.API_URL) {
-    errors.push('API_URL is required');
+    errors.push('NEXT_PUBLIC_API_URL is required');
   }
   
   if (!env.API_URL.startsWith('http')) {
-    errors.push('API_URL must be a valid URL');
+    errors.push('NEXT_PUBLIC_API_URL must be a valid URL');
   }
   
   if (errors.length > 0) {
@@ -50,8 +59,8 @@ export const validateConfig = () => {
   return true;
 };
 
-// Log de configuración solo si hay debugging
-if (typeof window !== 'undefined' && (env.IS_DEVELOPMENT || window.location.search.includes('debug'))) {
+// Log de configuración en desarrollo
+if (env.IS_DEVELOPMENT || env.IS_PRODUCTION) {
   console.log('🔧 Environment Configuration:', {
     API_URL: env.API_URL,
     APP_ENV: env.APP_ENV,

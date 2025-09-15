@@ -12,11 +12,6 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   title: "Gestión de Vehículos",
   description: "Sistema de gestión de vehículos - Prueba Técnica Frontend",
-  metadataBase: new URL(
-    process.env.NODE_ENV === 'production'
-      ? 'https://sebasjv534.github.io/frontend-prueba-tecnica-gps'
-      : 'http://localhost:3000'
-  ),
 };
 
 export default function RootLayout({
