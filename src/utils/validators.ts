@@ -9,6 +9,17 @@ export const isValidEmail = (email: string): boolean => {
 };
 
 /**
+ * Valida si un username es válido
+ * @param username - Username a validar
+ * @returns true si es válido, false en caso contrario
+ */
+export const isValidUsername = (username: string): boolean => {
+  // Entre 3 y 50 caracteres, solo letras, números y guiones bajos
+  const usernameRegex = /^[a-zA-Z0-9_]{3,50}$/;
+  return usernameRegex.test(username);
+};
+
+/**
  * Valida si una contraseña cumple con los requisitos mínimos
  * @param password - Contraseña a validar
  * @returns true si es válida, false en caso contrario
@@ -20,22 +31,13 @@ export const isValidPassword = (password: string): boolean => {
 };
 
 /**
- * Valida si un año es válido para un vehículo
- * @param year - Año a validar
- * @returns true si es válido, false en caso contrario
+ * Valida si una cadena no está vacía y tiene longitud válida
+ * @param str - Cadena a validar
+ * @param maxLength - Longitud máxima permitida (por defecto 120)
+ * @returns true si es válida, false en caso contrario
  */
-export const isValidVehicleYear = (year: number): boolean => {
-  const currentYear = new Date().getFullYear();
-  return year >= 1900 && year <= currentYear + 1;
-};
-
-/**
- * Valida si un precio es válido
- * @param price - Precio a validar
- * @returns true si es válido, false en caso contrario
- */
-export const isValidPrice = (price: number): boolean => {
-  return price > 0 && price <= 10000000000; // Máximo 10 mil millones
+export const isValidString = (str: string, maxLength: number = 120): boolean => {
+  return str.trim().length > 0 && str.trim().length <= maxLength;
 };
 
 /**
@@ -53,33 +55,77 @@ export const isNotEmpty = (str: string): boolean => {
  * @returns Objeto con errores de validación
  */
 export const validateVehicle = (vehicle: {
-  marca: string;
-  modelo: string;
-  año: number;
-  color: string;
-  precio: number;
-  descripcion?: string;
+  brand: string;
+  arrival_location: string;
+  applicant: string;
 }) => {
   const errors: Record<string, string> = {};
 
-  if (!isNotEmpty(vehicle.marca)) {
-    errors.marca = 'La marca es requerida';
+  if (!isValidString(vehicle.brand)) {
+    errors.brand = 'La marca es requerida y debe tener máximo 120 caracteres';
   }
 
-  if (!isNotEmpty(vehicle.modelo)) {
-    errors.modelo = 'El modelo es requerido';
+  if (!isValidString(vehicle.arrival_location)) {
+    errors.arrival_location = 'La sucursal es requerida y debe tener máximo 120 caracteres';
   }
 
-  if (!isValidVehicleYear(vehicle.año)) {
-    errors.año = 'El año debe estar entre 1900 y el año actual';
+  if (!isValidString(vehicle.applicant)) {
+    errors.applicant = 'El aspirante es requerido y debe tener máximo 120 caracteres';
   }
 
-  if (!isNotEmpty(vehicle.color)) {
-    errors.color = 'El color es requerido';
+  return {
+    isValid: Object.keys(errors).length === 0,
+    errors,
+  };
+};
+
+/**
+ * Valida datos de registro de usuario
+ * @param userData - Datos del usuario a validar
+ * @returns Objeto con errores de validación
+ */
+export const validateRegisterData = (userData: {
+  username: string;
+  email: string;
+  password: string;
+}) => {
+  const errors: Record<string, string> = {};
+
+  if (!isValidUsername(userData.username)) {
+    errors.username = 'El username debe tener entre 3 y 50 caracteres, solo letras, números y guiones bajos';
   }
 
-  if (!isValidPrice(vehicle.precio)) {
-    errors.precio = 'El precio debe ser mayor a 0';
+  if (!isValidEmail(userData.email)) {
+    errors.email = 'El email no tiene un formato válido';
+  }
+
+  if (!isValidPassword(userData.password)) {
+    errors.password = 'La contraseña debe tener al menos 8 caracteres, una letra y un número';
+  }
+
+  return {
+    isValid: Object.keys(errors).length === 0,
+    errors,
+  };
+};
+
+/**
+ * Valida datos de login
+ * @param loginData - Datos de login a validar
+ * @returns Objeto con errores de validación
+ */
+export const validateLoginData = (loginData: {
+  username: string;
+  password: string;
+}) => {
+  const errors: Record<string, string> = {};
+
+  if (!isNotEmpty(loginData.username)) {
+    errors.username = 'El username es requerido';
+  }
+
+  if (!isNotEmpty(loginData.password)) {
+    errors.password = 'La contraseña es requerida';
   }
 
   return {

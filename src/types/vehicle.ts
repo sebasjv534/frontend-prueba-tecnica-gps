@@ -1,43 +1,29 @@
 /**
- * Interfaz para el modelo de Vehículo
+ * Interface para el modelo Vehicle basado en el backend
  */
 export interface Vehicle {
-  id: number;
-  marca: string;
-  modelo: string;
-  año: number;
-  color: string;
-  precio: number;
-  descripcion?: string;
-  disponible: boolean;
-  created_at: string;
-  updated_at: string;
-  user_id: number;
+  id: string; // UUID
+  brand: string; // Marca
+  arrival_location: string; // Sucursal
+  applicant: string; // Aspirante
+  created_at: string; // ISO string date
+  updated_at?: string; // ISO string date, opcional para nuevos vehículos
 }
 
 /**
- * Interfaz para crear/actualizar un vehículo
+ * Interface para crear un nuevo vehículo (sin campos generados automáticamente)
  */
-export interface VehicleInput {
-  marca: string;
-  modelo: string;
-  año: number;
-  color: string;
-  precio: number;
-  descripcion?: string;
-  disponible?: boolean;
+export interface CreateVehicle {
+  brand: string; // Marca
+  arrival_location: string; // Sucursal
+  applicant: string; // Aspirante
 }
 
 /**
- * Interfaz para filtros de búsqueda de vehículos
+ * Interface para actualizar un vehículo existente
  */
-export interface VehicleFilters {
-  marca?: string;
-  modelo?: string;
-  año_min?: number;
-  año_max?: number;
-  precio_min?: number;
-  precio_max?: number;
-  color?: string;
-  disponible?: boolean;
+export interface UpdateVehicle {
+  brand?: string; // Marca
+  arrival_location?: string; // Sucursal
+  applicant?: string; // Aspirante
 }

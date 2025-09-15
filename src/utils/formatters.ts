@@ -1,18 +1,4 @@
 /**
- * Formatea un número como precio en formato colombiano
- * @param price - Precio a formatear
- * @returns Precio formateado como string
- */
-export const formatPrice = (price: number): string => {
-  return new Intl.NumberFormat('es-CO', {
-    style: 'currency',
-    currency: 'COP',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(price);
-};
-
-/**
  * Formatea una fecha en formato legible
  * @param date - Fecha a formatear
  * @returns Fecha formateada

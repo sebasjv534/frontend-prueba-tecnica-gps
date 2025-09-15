@@ -1,33 +1,32 @@
 /**
- * Interfaz para el modelo de Usuario
+ * Interface para el modelo User basado en el backend
  */
 export interface User {
-  id: number;
-  email: string;
+  id: string; // UUID
   username: string;
-  created_at: string;
-  updated_at: string;
+  email: string;
+  created_at: string; // ISO string date
 }
 
 /**
- * Interfaz para las credenciales de login
+ * Interface para las credenciales de login
  */
 export interface LoginCredentials {
-  email: string;
+  username: string; // Cambio: usar username en lugar de email
   password: string;
 }
 
 /**
- * Interfaz para el registro de usuario
+ * Interface para el registro de usuario
  */
 export interface RegisterData {
-  email: string;
   username: string;
+  email: string;
   password: string;
 }
 
 /**
- * Interfaz para la respuesta de autenticación
+ * Interface para la respuesta de autenticación
  */
 export interface AuthResponse {
   access_token: string;
