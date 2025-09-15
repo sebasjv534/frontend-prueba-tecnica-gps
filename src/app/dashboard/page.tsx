@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useAuth, useVehicles, ProtectedRoute } from '@/hooks';
 import { Vehicle } from '@/types';
+import { getRoutePath } from '@/utils';
 
 /**
  * Componente para el navbar del dashboard
@@ -16,7 +17,7 @@ function DashboardNavbar() {
 
   const handleLogout = async () => {
     await logout();
-    router.push('/home');
+    router.push(getRoutePath('/'));
   };
 
   return (

@@ -7,7 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useAuth, useForm } from '@/hooks';
 import { RegisterData } from '@/types';
-import { validateRegisterData } from '@/utils';
+import { validateRegisterData, getRoutePath } from '@/utils';
 
 /**
  * Componente para la animación lateral de círculos - Responsive
@@ -66,7 +66,7 @@ export default function RegisterPage() {
   const onSubmit = async (data: RegisterData) => {
     try {
       await register(data);
-      router.push('/dashboard');
+      router.push(getRoutePath('/dashboard'));
     } catch (error) {
       console.error('Error en registro:', error);
     }
@@ -84,7 +84,7 @@ export default function RegisterPage() {
         transition={{ duration: 0.6 }}
         className="absolute z-20 top-4 left-4 sm:top-6 sm:left-6 md:top-8 md:left-8"
       >
-        <Link href="/" className="inline-block">
+        <Link href={getRoutePath("/")} className="inline-block">
           <Image
             src="/images/Imagologo_motion.svg"
             alt="Logo Motion"
@@ -337,7 +337,7 @@ export default function RegisterPage() {
               </div>
 
               {/* Link a login */}
-              <Link href="/login">
+              <Link href={getRoutePath("/login")}>
                 <motion.button
                   type="button"
                   whileHover={{ scale: 1.02 }}
@@ -353,7 +353,7 @@ export default function RegisterPage() {
 
             {/* Link de regreso */}
             <div className="mt-6 text-center">
-              <Link href="/" className="text-sm text-[#00249C] hover:text-[#C6007E] transition-colors font-montserrat cursor-pointer font-medium">
+              <Link href={getRoutePath("/")} className="text-sm text-[#00249C] hover:text-[#C6007E] transition-colors font-montserrat cursor-pointer font-medium">
                 ← Volver al inicio
               </Link>
             </div>
