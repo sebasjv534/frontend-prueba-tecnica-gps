@@ -16,8 +16,9 @@ function DashboardNavbar() {
   const router = useRouter();
 
   const handleLogout = async () => {
-    await logout();
+    // Redirigir primero, luego hacer logout
     router.push('/');
+    await logout();
   };
 
   return (
